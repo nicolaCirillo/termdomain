@@ -10,6 +10,7 @@ setup(
       author_email='nicola.cirillo96@outlook.it',
       license='MIT',
       packages=find_packages(),
+      package_data = {'':['ALaCarte/**/*']},
       include_package_data=True,
       zip_safe=False,
       install_requires=[
