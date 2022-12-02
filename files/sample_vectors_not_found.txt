@@ -1,0 +1,34 @@
+ambito_NOUN territoriale_ADJ ottimale_ADJ
+autorizzazione_NOUN integrata_ADJ ambientale_ADJ
+bilancio_NOUN di_ADP sostenibilità_NOUN
+bioaccumulazione_NOUN
+bioarchitettura_NOUN
+biodigestione_NOUN
+biomassa_VERB
+centro_NOUN di_ADP raccolta_NOUN
+circuito_NOUN organizzato_ADJ di_ADP raccolta_NOUN
+co2_NUM equivalente_ADJ
+combustibile_NOUN solido_ADJ secondario_ADJ
+compost_NOUN di_ADP qualità_NOUN
+compostaggio_NOUN di_ADP comunità_NOUN
+consorzi_NOUN di_ADP filiera_NOUN
+digestato_VERB di_ADP qualità_NOUN
+discarica_VERB
+frazione_NOUN multimateriale_ADJ
+gestione_NOUN integrata_ADJ di_ADP i_DET rifiuti_NOUN
+green_NOUN procurement_NOUN
+life_NOUN cicle_ADJ assesment_CCONJ
+materia_NOUN prima_ADJ seconda_ADJ
+percolato_VERB
+poliaccoppiati_VERB
+pulper_ADP
+raccolta_VERB differenziata_VERB
+rifiuti_NOUN speciali_ADJ
+rifiuto_VERB
+rifiuto_VERB organico_ADJ
+rifiuto_VERB pericoloso_ADJ
+rigenerazione_NOUN di_ADP gli_DET oli_NOUN usati_VERB
+simbiosi_ADJ industriale_ADJ
+spazzamento_NOUN di_ADP le_DET strade_NOUN
+termovalorizzatore_NOUN
+valutazione_NOUN ambientale_ADJ strategica_ADJ
