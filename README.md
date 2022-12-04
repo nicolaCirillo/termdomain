@@ -15,15 +15,12 @@ SETUP
 ```
 pip install git+https://github.com/nicolaCirillo/termdomain
 ```
-
-GETTING STARTED
----------------
 ### Download the language module
 ```
-from dcr_term import dcr_term
-dcr_term.download('it')
+python -c "from dcr_term import dcr_term; dcr_term.download('it')"
 ```
-### Extract terms
+GETTING STARTED
+---------------
 ```
 from dcr_term import extract_terms, resuts2csv
 
