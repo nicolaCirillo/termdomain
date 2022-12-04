@@ -7,6 +7,7 @@ import os
 import requests
 import tempfile
 import zipfile
+import re
 
 
 from nltk.tree import Tree
@@ -201,6 +202,7 @@ def kcr(candidates, concepts, vectors, k=5):
     c_vecs = [vectors[c] for c in concepts if c in vectors]
     for cand in candidates:
         s = k_distance(vectors[cand], c_vecs, k)
+        cand = re.sub("_[A-Z]+", "", cand)
         scores.append((cand, s))
     return scores
 
