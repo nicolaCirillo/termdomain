@@ -7,7 +7,7 @@ import os
 import requests
 import tempfile
 import zipfile
-import re
+from itertools import dropwhile
 
 
 from nltk.tree import Tree
@@ -81,8 +81,7 @@ def load_path(lang):
 def extract_candidates(iterator, patterns):
     extractor = Extractor(patterns)
     candidates = extractor.extract(iterator)
-    candidates = [' '.join('_'.join(item) for item in c)
-                     for c in candidates]
+    candidates = [' '.join(item[0] for item in c) for c in candidates]
     return candidates
 
 # functions for contrastive weights
@@ -159,7 +158,7 @@ def gen_alacarte_files(iterator, targets, root):
     alc_corpus = root + 'corpus.txt'
     alc_targets = root + 'targets.txt'
     with codecs.open(alc_corpus, 'w', 'utf8') as fileout:
-        fileout.writelines([' '.join('_'.join(w) for w in sent) + '\n' 
+        fileout.writelines([' '.join(w[0] for w in sent) + '\n' 
                            for sent in iterator])
     with codecs.open(alc_targets, 'w', 'utf8') as fileout:
         targets = [c + '\n' for c in targets]
@@ -176,7 +175,7 @@ def alacarte_vecs(lang, root):
     }
     comand = 'python {alacarte} -v -m {matrix} -s {vectors} -w 5 -c {corpus} -t {targets_file} {dumproot} --create-new'
     os.system(comand.format_map(kwargs))
-    
+## Consider try keyedvectors to speed up the process
 def glove2list(glovefile, dim):
     vectors = dict()
     with codecs.open(glovefile, 'r', 'utf8') as filein:
@@ -202,13 +201,21 @@ def kcr(candidates, concepts, vectors, k=5):
     c_vecs = [vectors[c] for c in concepts if c in vectors]
     for cand in candidates:
         s = k_distance(vectors[cand], c_vecs, k)
-        cand = re.sub("_[A-Z]+", "", cand)
         scores.append((cand, s))
     return scores
 
 def tag_corpus(corpus, tagger):
     tagged = '.'.join(corpus.split('.')[:-1])
     tagger.tag_doc(corpus, tagged)
+
+    
+def frequency_filter(candidates, min_freq):
+    counter = Counter(candidates)
+    for key, _ in dropwhile(lambda key_count: key_count[1] >= min_freq, 
+                                counter.most_common()):
+        del counter[key]
+    return list(counter.keys())
+
 
 def extract_terms(concepts: list, corpus: str, lang: str, fileroot,
                     k=5, gen_files=True):
@@ -234,16 +241,8 @@ def extract_terms(concepts: list, corpus: str, lang: str, fileroot,
 
 
     """
-    print("Preprocessing.", end =' ')
-    tagger = Tagger(lang)
-    concepts = [tagger.tag_string(c) for c in concepts]
-    if corpus.lower().endswith(".conll") or corpus.lower().endswith(".conllu"):
-        conll = corpus
-    else:
-        conll = fileroot + 'corpus.conllu'
-        tagger.tag_doc(corpus, conll)
-    print("Done!\nExtracting candidates.", end =' ')
-    iterator = read_conll(conll)
+    print("Extracting candidates.", end =' ')
+    iterator = read_conll(corpus)
     patterns = load_path(lang)
     candidates = (extract_candidates(iterator, patterns))
     candidates = set(candidates)
