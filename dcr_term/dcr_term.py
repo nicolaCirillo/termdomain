@@ -22,7 +22,7 @@ FILEPATH = os.path.dirname(os.path.realpath(__file__)) + '/alacarte_files/'
 
 def download(lang):
     if lang == "it":
-        URL = "https://figshare.com/ndownloader/files/38410373"
+        URL = "https://figshare.com/ndownloader/files/38520662"
         response = requests.get(URL)
         with tempfile.TemporaryFile() as tmp:
             tmp.write(response.content)
