@@ -8,7 +8,9 @@ CONTENTS OF THIS FILE
 INTRODUCTION
 ------------
 
-A semi-supervised domain-aware term extractor. If you use this software in your research, please cite:
+A semi-supervised domain-aware term extractor.
+
+If you use this software in your research, please cite:
 ```
 @inproceedings{cirillo2023isolating,
   author = {N. Cirillo},
