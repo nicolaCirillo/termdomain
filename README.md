@@ -8,7 +8,18 @@ CONTENTS OF THIS FILE
 INTRODUCTION
 ------------
 
-A domain-aware term extractor.
+A semi-supervised domain-aware term extractor. If you use this software in your research, please cite:
+```
+@inproceedings{cirillo2023isolating,
+  author = {N. Cirillo},
+  booktitle = {Proceedings of the 2nd International Conference on Multilingual Digital Terminology Today (MDTT 2023)},
+  publisher = {CEUR Workshop Proceedings},
+  title = {Isolating Terminology Layers in Complex Linguistic Environments: a Study About Waste Management (Short Paper)},
+  volume = {3427},
+  url = {https://ceur-ws.org/Vol-3427/short3.pdf},
+  year = {2023},
+}
+```
 
 SETUP
 -----
