@@ -13,6 +13,7 @@ from itertools import dropwhile
 from nltk.tree import Tree
 from nltk import RegexpParser
 from conllu import parse
+from gensim.models import KeyedVectors
 
 from dcr_term.tagger import Tagger
 
@@ -175,32 +176,30 @@ def alacarte_vecs(lang, root):
     }
     comand = 'python {alacarte} -v -m {matrix} -s {vectors} -w 5 -c {corpus} -t {targets_file} {dumproot} --create-new'
     os.system(comand.format_map(kwargs))
-## Consider try keyedvectors to speed up the process
-def glove2list(glovefile, dim):
-    vectors = dict()
-    with codecs.open(glovefile, 'r', 'utf8') as filein:
-        for line in filein:
-            line = line.split(' ')
-            word, vector = line[:-dim], line[-dim:]
-            vectors[' '.join(word)] = [float(p) for p in vector]
-    return vectors
 
-def cosine(v1, v2):
-    cos_sim = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
-    if np.isnan(cos_sim):    
-        return 0
-    else:
-        return cos_sim
 
-def k_distance(v1, c_vecs, k):
-    dists = [cosine(v1, v2) for v2 in c_vecs]
-    return np.average(sorted(dists, reverse=True)[:k])
+def join_mwe(filename, dim=200):
+    with codecs.open(filename, "r", "utf8") as filein:
+        lines = filein.readlines()
+    with codecs.open(filename, "w", "utf8") as fileout:
+        for l in lines:
+            l = l.split(" ")
+            word, values = l[0:-dim], l[-dim:]
+            if not all([v == 0 for v in values]):
+                fileout.write("_".join(word) + " " + " ".join(values))
 
 def kcr(candidates, concepts, vectors, k=5):
+    join_mwe(vectors)
+    kv = KeyedVectors.load_word2vec_format(vectors, no_header=True)
+    concepts = [c.replace(" ", "_") for c in concepts]
     scores = list()
-    c_vecs = [vectors[c] for c in concepts if c in vectors]
+    c_vecs = kv.vectors_for_all(concepts)
+    c_vecs.fill_norms()
     for cand in candidates:
-        s = k_distance(vectors[cand], c_vecs, k)
+        v = kv.get_vector(cand.replace(" ", "_"))
+        similarities = c_vecs.most_similar(v, topn=k)
+        _, values = zip(*similarities)
+        s = np.mean(values)
         scores.append((cand, s))
     return scores
 
@@ -252,7 +251,7 @@ def extract_terms(concepts: list, corpus: str, lang: str, fileroot,
         gen_alacarte_files(iterator, targets, fileroot)
         alacarte_vecs(lang, fileroot)
     print("Done!\ncomputing scores.", end=' ')
-    vectors = glove2list(fileroot + 'vectors_alacarte.txt', dim=200)
+    vectors = fileroot + 'vectors_alacarte.txt'
     scores = kcr(candidates, concepts, vectors, k=k)
     print("Done!\nFinished")
     return sorted(scores, key=lambda x: x[1], reverse=True)
