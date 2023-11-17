@@ -19,6 +19,7 @@ setup(
               'nltk',
               'conllu',
               'spacy',
+              'spacy_conll'
               ],
       )
 
