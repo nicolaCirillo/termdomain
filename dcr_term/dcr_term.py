@@ -185,7 +185,7 @@ def join_mwe(filename, dim=200):
         for l in lines:
             l = l.split(" ")
             word, values = l[0:-dim], l[-dim:]
-            if not all([v == 0 for v in values]):
+            if not all([float(v) == 0 for v in values]):
                 fileout.write("_".join(word) + " " + " ".join(values))
 
 def kcr(candidates, concepts, vectors, k=5):
@@ -196,7 +196,10 @@ def kcr(candidates, concepts, vectors, k=5):
     c_vecs = kv.vectors_for_all(concepts)
     c_vecs.fill_norms()
     for cand in candidates:
-        v = kv.get_vector(cand.replace(" ", "_"))
+        try:
+            v = kv.get_vector(cand.replace(" ", "_"))
+        except KeyError:
+            continue
         similarities = c_vecs.most_similar(v, topn=k)
         _, values = zip(*similarities)
         s = np.mean(values)
