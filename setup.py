@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
       name='termdomain',
-      version='0.1',
+      version='0.1.1',
       description='A term extraction tool based on word embeddings.',
       url='#',
       author='Nicola Cirillo',
@@ -19,7 +19,8 @@ setup(
               'nltk',
               'conllu',
               'spacy',
-              'spacy_conll'
+              'spacy_conll',
+              'gensim',
               ],
       )
 

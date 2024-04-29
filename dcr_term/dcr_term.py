@@ -206,6 +206,13 @@ def kcr(candidates, concepts, vectors, k=5):
         scores.append((cand, s))
     return scores
 
+def _get_variants(concept, vectors):
+    join_mwe(vectors)
+    kv = KeyedVectors.load_word2vec_format(vectors, no_header=True)
+    concept = concept.replace(" ", "_")
+    similar = kv.most_similar(concept)
+    return similar
+
 def tag_corpus(corpus, tagger):
     tagged = '.'.join(corpus.split('.')[:-1])
     tagger.tag_doc(corpus, tagged)
@@ -236,6 +243,8 @@ def extract_terms(concepts: list, corpus: str, lang: str, fileroot,
         a plain text file encoded in utf8).
     lang: str
         The language code.
+    fileroot: str or path-like object
+        The path where the files created during the extraction process are stored.
     k: int, default=5
         k parameter for k-Nearest Neighbour.
     gen_files: bool, default=True
@@ -259,6 +268,20 @@ def extract_terms(concepts: list, corpus: str, lang: str, fileroot,
     print("Done!\nFinished")
     return sorted(scores, key=lambda x: x[1], reverse=True)
 
+def get_variants(term: str, fileroot):
+    """Extract a list of variants of the given term.
+
+    Please run 'extract terms' first and provide the same fileroot.'
+    
+     Parameters
+    ----------
+    term: str
+       The term
+    fileroot: str or path-like object
+        The path where the files created during the extraction process are stored.
+    """
+    vectors = fileroot + 'vectors_alacarte.txt'
+    return _get_variants(term, vectors)
 
 def resuts2csv(results, path):
     """Saves the list of terms in .csv

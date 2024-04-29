@@ -1,1 +1,1 @@
-from .dcr_term import extract_terms, resuts2csv, extract_contrastive
+from .dcr_term import extract_terms, resuts2csv, extract_contrastive, get_variants
